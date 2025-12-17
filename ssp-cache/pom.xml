@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>boyu.ssp</groupId>
+        <artifactId>ssp-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>ssp-cache</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>SSP Cache</name>
+    <description>SSP Two-Level Cache Architecture (Caffeine + Redis)</description>
+
+    <dependencies>
+
+        <!-- Caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
+        <!-- Common Model -->
+        <dependency>
+            <groupId>boyu.ssp</groupId>
+            <artifactId>ssp-common-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+
+    </dependencies>
+</project>

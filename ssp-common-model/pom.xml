@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>boyu.ssp</groupId>
+        <artifactId>ssp-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+     <dependencies>
+         <dependency>
+             <groupId>boyu.ssp</groupId>
+             <artifactId>ssp-common</artifactId>
+             <version>${project.version}</version>
+         </dependency>
+    </dependencies>
+
+    <artifactId>ssp-common-model</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>SSP Common Model</name>
+    <description>SSP Entity Classes</description>
+</project>

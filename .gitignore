@@ -1,0 +1,147 @@
+# Compiled class files
+*.class
+
+# Build artifacts
+*.jar
+*.war
+*.ear
+*.nar
+*.tar.gz
+*.zip
+
+# Maven directories
+target/
+!mvnw
+!pom.xml
+!.mvn/
+
+# Gradle directories
+build/
+.gradle/
+gradle/
+!gradlew
+!gradle.properties
+
+# IDE directories and files
+.idea/
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.classpath
+.settings/
+.vscode/
+*.code-workspace
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Log files
+logs/
+*.log
+*.out
+*.err
+nohup.out
+
+# Configuration files with sensitive information
+*.properties
+!application.properties
+!bootstrap.properties
+*.yml
+!application.yml
+!bootstrap.yml
+*.xml
+!pom.xml
+!spring-*.xml
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.mdb
+*.accdb
+*.sql
+*.sql.gz
+
+# Testing files
+test-results/
+jacoco.exec
+*.jacoco
+surefire-reports/
+test-output/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+*.bak
+*.swp
+*.swo
+*~
+
+# Docker-related files
+.dockerignore
+docker-compose.override.yml
+
+# Node.js files (if using frontend frameworks)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# SSL/TLS certificates
+*.pem
+*.key
+*.cert
+*.csr
+*.jks
+
+# Documentation
+site/
+apidocs/
+docs/.vuepress/dist/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Miscellaneous
+.classpath
+.project
+.settings/
+.metadata/
+*.launch
+*.sublime-project
+*.sublime-workspace
+*.bak
+*.old
+*.orig
+*.rej
