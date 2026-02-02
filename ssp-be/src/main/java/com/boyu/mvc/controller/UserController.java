@@ -16,8 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,13 +66,18 @@ public class UserController {
         String username = loginVo.getUsername();
         String password = loginVo.getFromApi() ? loginVo.getPassword() : DecryptionUtil.decrypt(loginVo.getPassword());
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(upToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        authenticationManager.authenticate(upToken);
         String token = jwtUtil.generateToken(username);
         cacheService.set(JWT_REDIS_PREFIX + username, token, Duration.ofSeconds(1800));
         BsResponse res = BsResponse.ok();
         res.put("token", token);
         return res;
+    }
+
+    @GetMapping("/logout")
+    public BsResponse logout() {
+        SecurityUtil.getCurrentUser().ifPresent(user -> cacheService.delete(JWT_REDIS_PREFIX + user.getUsername()));
+        return BsResponse.ok();
     }
 
     @PostMapping("/register")
