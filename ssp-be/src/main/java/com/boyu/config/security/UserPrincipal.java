@@ -1,6 +1,6 @@
 package com.boyu.config.security;
 
-import com.boyu.mvc.entity.UserEntity;
+import com.boyu.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;

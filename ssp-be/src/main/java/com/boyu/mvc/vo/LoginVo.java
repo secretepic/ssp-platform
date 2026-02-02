@@ -16,4 +16,10 @@ public class LoginVo {
 
     private Boolean fromApi = false;
 
+    @NotNull(message = "验证码不能为空")
+    private String captchaCode;
+
+    @NotNull(message = "验证码ID不能为空")
+    private String captchaId;
+
 }

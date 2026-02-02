@@ -19,4 +19,11 @@ public class BsResponse extends HashMap<String, Object> {
         return res;
     }
 
+    public static BsResponse error(String msg) {
+        BsResponse res = new BsResponse();
+        res.put("code", 500);
+        res.put("msg", msg);
+        return res;
+    }
+
 }
