@@ -1,8 +1,8 @@
 package com.boyu.mvc.controller;
 
 import com.boyu.cache.CacheService;
-import com.boyu.mvc.entity.UserEntity;
-import com.boyu.mvc.service.UserService;
+import com.boyu.entity.UserEntity;
+import com.boyu.service.UserService;
 import com.boyu.mvc.vo.LoginVo;
 import com.boyu.servlet.BsResponse;
 import com.boyu.util.DecryptionUtil;

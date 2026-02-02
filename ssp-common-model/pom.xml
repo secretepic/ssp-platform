@@ -22,6 +22,24 @@
              <version>${mybatis-plus.version}</version>
              <scope>provided</scope>
          </dependency>
+         <dependency>
+             <groupId>com.baomidou</groupId>
+             <artifactId>mybatis-plus-core</artifactId>
+             <version>${mybatis-plus.version}</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+             <groupId>com.baomidou</groupId>
+             <artifactId>mybatis-plus-spring</artifactId>
+             <version>${mybatis-plus.version}</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-web</artifactId>
+             <version>${spring-boot.version}</version>
+             <scope>provided</scope>
+         </dependency>
     </dependencies>
 
     <artifactId>ssp-common-model</artifactId>
