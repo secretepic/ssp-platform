@@ -1,5 +1,6 @@
 package com.boyu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,4 +27,10 @@ public class BaseEntity {
      * 更新时间（默认当前时间戳）
      */
     private Date updateTime;
+
+    /**
+     * 删除标志（0-正常，1-已删除）
+     */
+    @TableLogic
+    private Boolean delFlag;
 }
