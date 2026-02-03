@@ -29,6 +29,11 @@ public class BaseEntity {
     private Date updateTime;
 
     /**
+     * 状态（例如：0-禁用，1-正常）
+     */
+    private Boolean status;
+
+    /**
      * 删除标志（0-正常，1-已删除）
      */
     @TableLogic

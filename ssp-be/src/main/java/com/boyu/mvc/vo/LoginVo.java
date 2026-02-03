@@ -12,7 +12,7 @@ public class LoginVo {
     @NotNull(message = "密码不能为空")
     private String password;
 
-    private Integer status;
+    private Boolean status;
 
     private Boolean fromApi = false;
 

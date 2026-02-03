@@ -4,7 +4,7 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.lang.UUID;
 import com.boyu.cache.CacheService;
-import com.boyu.entity.UserEntity;
+import com.boyu.entity.system.UserEntity;
 import com.boyu.service.UserService;
 import com.boyu.mvc.vo.LoginVo;
 import com.boyu.servlet.BsResponse;

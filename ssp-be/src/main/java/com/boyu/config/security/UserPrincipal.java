@@ -1,6 +1,6 @@
 package com.boyu.config.security;
 
-import com.boyu.entity.UserEntity;
+import com.boyu.entity.system.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.Collections;
 @Data
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
-    private Integer id;
+    private Long id;
     private String username;
     @JsonIgnore
     private String password;

@@ -3,7 +3,7 @@ package com.boyu.config.security;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.boyu.cache.CacheService;
-import com.boyu.entity.UserEntity;
+import com.boyu.entity.system.UserEntity;
 import com.boyu.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
