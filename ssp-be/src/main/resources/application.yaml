@@ -47,7 +47,7 @@ mybatis-plus:
     banner: true
   type-aliases-package: com.boyu.**
   #  classpath*表示不仅扫描当前项目下的mapper目录，还扫描依赖jar下的mapper目录
-  mapper-locations: classpath*:mapper/*.xml
+  mapper-locations: classpath*:mapper/**/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true

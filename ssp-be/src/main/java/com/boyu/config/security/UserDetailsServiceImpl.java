@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.boyu.cache.CacheService;
 import com.boyu.entity.system.UserEntity;
-import com.boyu.mapper.UserMapper;
+import com.boyu.mapper.system.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
