@@ -14,6 +14,14 @@ public class BsResponse extends HashMap<String, Object> {
         return res;
     }
 
+    public static <T> BsResponse ok(T data) {
+        BsResponse res = new BsResponse();
+        res.put("code", 200);
+        res.put("msg", "success");
+        res.put("data", data);
+        return res;
+    }
+
     public static BsResponse error() {
         BsResponse res = new BsResponse();
         res.put("code", 500);

@@ -2,14 +2,17 @@ package com.boyu.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.Date;
 
+
+@EqualsAndHashCode(callSuper = true)
 @Data
-@TableName("user")
-public class UserEntity {
+@TableName("sys_user")
+public class UserEntity extends BaseEntity {
     /**
      * 主键ID，自增
      */
@@ -30,24 +33,15 @@ public class UserEntity {
      */
     private Integer status;
 
-    /**
-     * 创建人ID
-     */
-    private Integer creator;
+     /**
+      * 角色ID
+      */
+    private Long roleId;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新人ID
-     */
-    private Integer updater;
-
-    /**
-     * 更新时间（默认当前时间戳）
-     */
-    private Date updateTime;
+     /**
+      * 删除标志（0-正常，1-已删除）
+      */
+    @TableLogic
+    private Boolean delFlag;
 
 }
