@@ -1,4 +1,4 @@
-package com.boyu.config;
+package com.boyu.cache.config;
 
 import com.boyu.cache.CacheService;
 import com.boyu.cache.impl.ReactiveRedisCacheServiceImpl;

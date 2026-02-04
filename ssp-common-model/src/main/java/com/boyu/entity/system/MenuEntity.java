@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.boyu.entity.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * 菜单实体类
@@ -13,6 +12,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName("sys_menu")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenuEntity extends BaseEntity {
 
     @TableId(type = IdType.AUTO)

@@ -4,14 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.boyu.entity.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
+import lombok.*;
 
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_user")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity extends BaseEntity {
 
     /**
