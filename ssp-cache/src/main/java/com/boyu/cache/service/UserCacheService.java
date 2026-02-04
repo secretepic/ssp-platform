@@ -39,4 +39,10 @@ public class UserCacheService extends AbstractCacheService<UserEntity> {
         }
         caffeineCache.put(key, val);
     }
+
+
+    @Override
+    public void delLocal(String key) {
+        caffeineCache.invalidate(key);
+    }
 }
