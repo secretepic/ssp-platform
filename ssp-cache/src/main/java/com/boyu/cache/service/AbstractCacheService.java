@@ -1,5 +1,6 @@
 package com.boyu.cache.service;
 
+import com.alibaba.fastjson2.JSON;
 import com.boyu.cache.CacheService;
 import com.boyu.entity.BaseEntity;
 import jakarta.annotation.Resource;
@@ -31,7 +32,7 @@ public abstract class AbstractCacheService<T extends BaseEntity> {
     }
 
     public void set(String key, T val, Duration duration) {
-        cacheService.set(key, val.toString(), duration);
+        cacheService.set(key, JSON.toJSONString(val), duration);
         putLocal(key, val);
     }
 
