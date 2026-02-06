@@ -13,7 +13,8 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
     private final Cache<String, T> caffeineCache;
     // 缓存实体类类型（用于构建空对象）
     private final Class<T> entityClass;
-
+    // 缓存null key（1分钟），用于防止缓存击穿
+    private final Cache<String, Boolean> nullKeyCache;
     /**
      * 构造方法：注入差异化配置，初始化缓存
      * @param cachePrefix 缓存key前缀（RedisPrefix.XXX.getPrefix()）
@@ -29,14 +30,43 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
                 .maximumSize(maxSize)
                 .build();
         this.entityClass = entityClass;
+        // 初始化null key缓存（1分钟过期）
+        this.nullKeyCache = Caffeine.newBuilder()
+                .expireAfterWrite(Duration.ofMinutes(1))
+                .maximumSize(maxSize)
+                .build();
+    }
+
+     /**
+     * 统一实现：获取实体类类型
+     */
+    @Override
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
+
+     /**
+     * 统一实现：是否查询Redis
+     */
+    @Override
+    public boolean canQueryRedis(String key) {
+        return nullKeyCache.getIfPresent(key) == null;
     }
 
     /**
      * 统一实现：拼接缓存key（前缀+入参）
      */
     @Override
-    String getCacheKey(String val) {
+    public String getCacheKey(String val) {
         return cachePrefix + val;
+    }
+
+    /**
+     * 统一实现：获取缓存前缀
+     */
+    @Override
+    public String getCachePrefix() {
+        return cachePrefix;
     }
 
 
@@ -44,18 +74,13 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
      * 统一实现：本地缓存查询+防击穿逻辑
      */
     @Override
-    T getLocal(String key) {
+    public T getLocal(String key) {
         T entity = caffeineCache.getIfPresent(key);
         if (entity == null) {
-            try {
-                // 反射构建空实体（替代硬编码的Builder，适配所有BaseEntity子类）
-                entity = entityClass.getDeclaredConstructor().newInstance();
-            } catch (Exception e) {
-                // 兼容Builder模式（若实体用Builder构建）
-                throw new RuntimeException("构建空缓存实体失败", e);
+            // 检查null key缓存是否存在
+            if (nullKeyCache.getIfPresent(key) == null) {
+                nullKeyCache.put(key, Boolean.TRUE);
             }
-            // 防打穿：存入空实体（原逻辑不变）
-            caffeineCache.put(key, entity);
         }
         return entity;
     }
@@ -65,7 +90,7 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
      * 统一实现：本地缓存写入
      */
     @Override
-    void putLocal(String key, T val) {
+    public void putLocal(String key, T val) {
         if (val == null) {
             return;
         }
@@ -76,7 +101,7 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
      * 统一实现：本地缓存删除
      */
     @Override
-    void delLocal(String key) {
+    public void delLocal(String key) {
         caffeineCache.invalidate(key);
     }
 

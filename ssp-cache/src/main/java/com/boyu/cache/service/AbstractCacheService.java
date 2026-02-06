@@ -14,13 +14,19 @@ public abstract class AbstractCacheService<T extends BaseEntity> {
     @Resource
     protected CacheService cacheService;
 
-    abstract String getCacheKey(String val);
+    public abstract String getCacheKey(String val);
 
-    abstract T getLocal(String key);
+    public abstract String getCachePrefix();
 
-    abstract void putLocal(String key, T val);
+    public abstract T getLocal(String key);
 
-    abstract void delLocal(String key);
+    public abstract void putLocal(String key, T val);
+
+    public abstract void delLocal(String key);
+
+    public abstract Class<T> getEntityClass();
+
+    public abstract boolean canQueryRedis(String key);
 
     public T get(String key, Class<T> type) {
         Optional<T> cache = cacheService.get(key, type);
@@ -31,8 +37,12 @@ public abstract class AbstractCacheService<T extends BaseEntity> {
         return null;
     }
 
-    public void set(String key, T val, Duration duration) {
-        cacheService.set(key, JSON.toJSONString(val), duration);
+    public void set(String key, T val, Duration... duration) {
+        if (duration.length != 0) {
+            cacheService.set(key, JSON.toJSONString(val), duration[0]);
+        } else {
+            cacheService.set(key, JSON.toJSONString(val));
+        }
         putLocal(key, val);
     }
 
