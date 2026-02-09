@@ -3,7 +3,8 @@ package com.boyu.mvc.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.lang.UUID;
-import com.boyu.cache.CacheService;
+import com.boyu.cache.enumerate.RedisPrefix;
+import com.boyu.cache.manager.CacheManager;
 import com.boyu.entity.system.UserEntity;
 import com.boyu.service.system.UserService;
 import com.boyu.mvc.vo.LoginVo;
@@ -29,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final CacheService cacheService;
+    private final CacheManager cacheManager;
 
     private final UserService userService;
 
@@ -37,10 +38,7 @@ public class UserController {
 
     private final AuthenticationManager authenticationManager;
 
-
     private final PasswordEncoder passwordEncoder;
-
-    private static final String JWT_REDIS_PREFIX = "jwt:token:";
 
 
     @RequestMapping("/list")
@@ -68,7 +66,7 @@ public class UserController {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
         authenticationManager.authenticate(upToken);
         String token = jwtUtil.generateToken(username);
-        cacheService.set(JWT_REDIS_PREFIX + username, token, Duration.ofSeconds(1800));
+        cacheManager.set(RedisPrefix.JWT_TOKEN.getPrefix() + username, token, Duration.ofSeconds(1800));
         BsResponse res = BsResponse.ok();
         res.put("token", token);
         return res;
@@ -76,7 +74,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public BsResponse logout() {
-        SecurityUtil.getCurrentUser().ifPresent(user -> cacheService.delete(JWT_REDIS_PREFIX + user.getUsername()));
+        SecurityUtil.getCurrentUser().ifPresent(user -> cacheManager.del(RedisPrefix.JWT_TOKEN.getPrefix() + user.getUsername()));
         return BsResponse.ok();
     }
 
@@ -102,10 +100,10 @@ public class UserController {
         String uuid = UUID.fastUUID().toString();
         String code = lineCaptcha.getCode();
         response.setHeader("captcha-id", uuid);
-        cacheService.set(uuid, code, Duration.ofSeconds(60));
+        cacheManager.set(uuid, code, Duration.ofSeconds(60));
     }
 
     private boolean verifyCaptcha(String captchaId, String captchaCode) {
-        return cacheService.get(captchaId, String.class).map(code -> !code.equalsIgnoreCase(captchaCode)).orElse(true);
+        return cacheManager.get(captchaId, String.class).map(code -> !code.equalsIgnoreCase(captchaCode)).orElse(true);
     }
 }

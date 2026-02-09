@@ -1,7 +1,7 @@
 package com.boyu.config.security;
 
 
-import com.boyu.cache.CacheService;
+import com.boyu.cache.manager.CacheManager;
 import com.boyu.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,11 +33,11 @@ public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final JwtUtil jwtUtils;
-    private final CacheService cacheService;
+    private final CacheManager cacheManager;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter(jwtUtils, userDetailsService, cacheService);
+        return new AuthTokenFilter(jwtUtils, userDetailsService, cacheManager);
     }
 
     @Bean

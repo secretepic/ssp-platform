@@ -1,6 +1,7 @@
 package com.boyu.config.security;
 
-import com.boyu.cache.CacheService;
+import com.boyu.cache.enumerate.RedisPrefix;
+import com.boyu.cache.manager.CacheManager;
 import com.boyu.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -30,8 +31,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
-    private final CacheService cacheService;
-    private static final String JWT_REDIS_PREFIX = "jwt:token:";
+    private final CacheManager cacheManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -43,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 Jws<Claims> claimsJws = jwtUtils.validateToken(jwt);
                 String username = claimsJws.getPayload().getSubject();
                 // 从Redis中获取存储的JWT
-                String redisJwt = cacheService.get(JWT_REDIS_PREFIX + username, String.class).orElse(null);
+                String redisJwt = cacheManager.get(RedisPrefix.JWT_TOKEN.getPrefix() + username, String.class).orElse(null);
 
                 // 验证JWT是否有效且与Redis中存储的一致, 并且用户名与JWT中的用户名一致，如果任何一个没满足就会返回401
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null &&
