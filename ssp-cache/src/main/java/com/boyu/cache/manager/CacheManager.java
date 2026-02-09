@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.CastUtils;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +32,12 @@ public class CacheManager {
         }
     }
 
+    /**
+     *  采用val和Class的设计是基于灵活设置缓存key的，比如username，这时候会比传一个对象，获取类型和属性方便
+     *  优先读取本地缓存，没有命中查询redis，并设置一分钟不再查询redis，减小redis请求压力
+     *  当redis查询不为空或主动调用set方法设置缓存时，会更新本地缓存
+     *  读写分离，避免并发缓存竞态条件
+     */
     public <T extends BaseEntity> T get(String val, Class<T> type) {
         if (ObjectUtil.isAllEmpty(val, type)) {
             log.error("缓存值[{}]或类型[{}]为空，无法获取缓存", val, type.getName());
@@ -64,6 +73,43 @@ public class CacheManager {
         AbstractCacheService<T> cacheService = CastUtils.cast(abstractCacheService);
         String key = cacheService.getCacheKey(val);
         cacheService.set(key, entity, duration);
+    }
+
+    public <T extends BaseEntity> void del(String val, Class<T> type) {
+        if (ObjectUtil.isAllEmpty(val, type)) {
+            log.error("缓存值[{}]或类型[{}]为空，无法删除缓存", val, type.getName());
+            return;
+        }
+        AbstractCacheService<? extends BaseEntity> abstractCacheService = cacheServiceMap.get(type);
+        if (abstractCacheService == null) {
+            log.error("缓存服务[{}]未初始化，无法删除缓存值", type.getName());
+            return;
+        }
+        AbstractCacheService<T> cacheService = CastUtils.cast(abstractCacheService);
+        String key = cacheService.getCacheKey(val);
+        cacheService.del(key);
+    }
+
+    public <T extends BaseEntity> Mono<Optional<T>> getReactive(String val, Class<T> type) {
+        if (ObjectUtil.isAllEmpty(val, type)) {
+            log.error("缓存值[{}]或类型[{}]为空，无法获取缓存", val, type.getName());
+            return Mono.empty();
+        }
+        AbstractCacheService<? extends BaseEntity> abstractCacheService = cacheServiceMap.get(type);
+        if (abstractCacheService == null) {
+            log.error("缓存服务[{}]未初始化，无法获取缓存值", type.getName());
+            return Mono.empty();
+        }
+        AbstractCacheService<T> cacheService = CastUtils.cast(abstractCacheService);
+        String key = cacheService.getCacheKey(val);
+        T local = cacheService.getLocal(key);
+        if (local != null) {
+            return Mono.just(Optional.of(local));
+        }
+        if (!cacheService.canQueryRedis(key)) {
+            return Mono.empty();
+        }
+        return cacheService.getReactive(key, type);
     }
 
 
