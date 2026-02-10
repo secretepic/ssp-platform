@@ -79,13 +79,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public BsResponse register(@RequestBody LoginVo loginVo) {
+    public BsResponse register(@Valid @RequestBody LoginVo loginVo) {
         if (verifyCaptcha(loginVo.getCaptchaId(), loginVo.getCaptchaCode())) {
-            return BsResponse.error("验证码错误");
+            return BsResponse.error("验证码过期或错误");
         }
         UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(loginVo.getUsername());
-        userEntity.setPassword(passwordEncoder.encode(loginVo.getPassword()));
+        userEntity.setUsername(loginVo.getUsername());
+        String password = loginVo.getFromApi() ? loginVo.getPassword() : DecryptionUtil.decrypt(loginVo.getPassword());
+        userEntity.setPassword(passwordEncoder.encode(password));
         userEntity.setStatus(loginVo.getStatus());
         SecurityUtil.getCurrentUser().ifPresent(user -> userEntity.setCreator(user.getId()));
         userEntity.setCreateTime(new Date());

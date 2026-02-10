@@ -16,10 +16,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public BsResponse handleException(Exception e) {
         log.error("全局异常捕获", e);
-        if (e instanceof BsException) {
+        if (e instanceof BsException bsException) {
             BsResponse error = BsResponse.error();
-            if (((BsException) e).getCode() != null) {
-                error.put("code", ((BsException) e).getCode());
+            if (bsException.getCode() != null) {
+                error.put("code", bsException.getCode());
             }
             error.put("message", e.getMessage());
             error.put("success", false);

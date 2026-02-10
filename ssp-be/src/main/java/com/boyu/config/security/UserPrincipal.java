@@ -24,7 +24,7 @@ public class UserPrincipal implements UserDetails {
     public static UserPrincipal build(UserEntity user) {
         return new UserPrincipal(
                 user.getId(),
-                user.getUserName(),
+                user.getUsername(),
                 user.getPassword(),
                 null
         );
