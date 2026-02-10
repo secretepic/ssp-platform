@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -42,8 +41,8 @@ public class UserController {
 
 
     @RequestMapping("/list")
-    public List<UserEntity> list() {
-        return userService.list();
+    public BsResponse list() {
+        return BsResponse.ok(userService.list());
     }
 
     /**
