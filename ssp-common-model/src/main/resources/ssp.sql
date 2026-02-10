@@ -2,7 +2,7 @@ CREATE TABLE `sys_user` (
                             `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '用户ID',
                             `username` VARCHAR(50) NOT NULL UNIQUE COMMENT '用户名（登录用）',
                             `password` VARCHAR(100) NOT NULL COMMENT '密码（BCrypt加密）',
-                            `role_id` BIGINT NULL AUTO_INCREMENT COMMENT '角色ID',
+                            `role_id` BIGINT NULL COMMENT '角色ID',
                             `status` TINYINT DEFAULT 1 COMMENT '状态：1正常 0禁用',
                             `del_flag` TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除 0-未删 1-已删',
                             `creator` BIGINT DEFAULT NULL COMMENT '创建人ID',
