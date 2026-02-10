@@ -30,6 +30,11 @@ public class MenuEntity extends BaseEntity {
      */
     private String menuName;
 
+    /**
+     * 图标
+     */
+    private String icon;
+
      /**
       * 类型 1-菜单 2-按钮
       */

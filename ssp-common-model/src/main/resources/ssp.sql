@@ -30,6 +30,7 @@ CREATE TABLE `sys_menu` (
                             `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '菜单/按钮ID',
                             `parent_id` BIGINT NOT NULL DEFAULT 0 COMMENT '上级ID 0-根节点',
                             `menu_name` VARCHAR(50) NOT NULL COMMENT '菜单/按钮名称',
+                            `icon` VARCHAR(50) DEFAULT NULL COMMENT '图标（菜单1有值）',
                             `type` TINYINT NOT NULL COMMENT '类型 1-菜单 2-按钮（核心区分）',
                             `front_path` VARCHAR(255) DEFAULT NULL COMMENT '前端组件路径（仅菜单1有值）',
                             `backend_route` VARCHAR(255) DEFAULT NULL COMMENT '后端路由/接口前缀（仅菜单1有值，如/api/user）',
