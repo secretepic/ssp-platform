@@ -17,14 +17,13 @@ public class MenuController extends BaseController {
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('sys:menu:list')")
-    public BsResponse list(MenuVo menuVo) {
-        return BsResponse.ok(menuService.list());
+    public BsResponse list(@RequestParam String menuName) {
+        return BsResponse.ok(menuService.list(menuName));
     }
 
     @GetMapping("/tree")
     //    @PreAuthorize("hasAuthority('sys:menu:tree')")
     public BsResponse tree() {
-        // 这里需要加一个参数，根据id查询菜单树
         return BsResponse.ok(menuService.tree());
     }
 
