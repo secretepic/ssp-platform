@@ -1,6 +1,7 @@
 package com.boyu.service.system.impl;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.boyu.entity.system.MenuEntity;
@@ -21,6 +22,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             return null;
         }
         return buildTree(meneList);
+    }
+
+    @Override
+    public void validateMenu(MenuEntity menuEntity) {
+        Integer type = menuEntity.getType();
+        if (type == 1) {
+            if (StrUtil.isBlank(menuEntity.getFrontPath())) {
+                throw new IllegalArgumentException("菜单类型为菜单时，前端组件路径不能为空");
+            }
+        } else {
+            if (StrUtil.isBlank(menuEntity.getPermCode())) {
+                throw new IllegalArgumentException("菜单类型为按钮时，权限编码不能为空");
+            }
+        }
     }
 
     private MenuTreeVo buildTree(List<MenuEntity> menuList) {
