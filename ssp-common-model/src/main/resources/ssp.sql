@@ -77,3 +77,5 @@ CREATE TABLE `sys_user_role` (
                                  UNIQUE KEY `uk_user_role` (`user_id`,`role_id`),
                                  KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联表';
+
+INSERT INTO `ssp-be`.sys_menu (parent_id, menu_name, icon, type, front_path, backend_route, perm_code, sort, status, del_flag, creator, updater, create_time, update_time) VALUES (DEFAULT, '一级菜单', null, 1, null, null, null, DEFAULT, DEFAULT, DEFAULT, null, null, DEFAULT, DEFAULT);

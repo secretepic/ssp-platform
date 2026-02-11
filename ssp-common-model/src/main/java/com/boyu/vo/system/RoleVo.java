@@ -1,4 +1,4 @@
-package com.boyu.mvc.vo;
+package com.boyu.vo.system;
 
 import com.boyu.entity.BaseEntity;
 import lombok.Data;
