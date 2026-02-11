@@ -3,6 +3,7 @@ package com.boyu.cache.service;
 import com.boyu.entity.BaseEntity;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.util.concurrent.RateLimiter;
 import java.time.Duration;
 
 public class GenericCacheService<T extends BaseEntity> extends AbstractCacheService<T> {
@@ -14,7 +15,7 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
     // 缓存实体类类型（用于构建空对象）
     private final Class<T> entityClass;
     // 缓存null key（1分钟），用于防止缓存击穿
-    private final Cache<String, Boolean> nullKeyCache;
+    private final Cache<String, RateLimiter> rateLimiterCache;
     /**
      * 构造方法：注入差异化配置，初始化缓存
      * @param cachePrefix 缓存key前缀（RedisPrefix.XXX.getPrefix()）
@@ -31,7 +32,7 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
                 .build();
         this.entityClass = entityClass;
         // 初始化null key缓存（1分钟过期）
-        this.nullKeyCache = Caffeine.newBuilder()
+        this.rateLimiterCache = Caffeine.newBuilder()
                 .expireAfterWrite(Duration.ofMinutes(1))
                 .maximumSize(maxSize)
                 .build();
@@ -50,7 +51,10 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
      */
     @Override
     public boolean canQueryRedis(String key) {
-        return nullKeyCache.getIfPresent(key) == null;
+        // 原子性获取/创建限流器：不存在则执行lambda创建，避免并发重复
+        RateLimiter rateLimiter = rateLimiterCache.get(key, k -> RateLimiter.create(1.0));
+        // 无等待尝试获取令牌：1秒仅1个请求能通过，其余直接返回false
+        return rateLimiter.tryAcquire();
     }
 
     /**
@@ -75,14 +79,7 @@ public class GenericCacheService<T extends BaseEntity> extends AbstractCacheServ
      */
     @Override
     public T getLocal(String key) {
-        T entity = caffeineCache.getIfPresent(key);
-        if (entity == null) {
-            // 检查null key缓存是否存在
-            if (nullKeyCache.getIfPresent(key) == null) {
-                nullKeyCache.put(key, Boolean.TRUE);
-            }
-        }
-        return entity;
+        return caffeineCache.getIfPresent(key);
     }
 
 
