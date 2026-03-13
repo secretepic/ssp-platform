@@ -24,6 +24,11 @@ public class GlobalExceptionHandler {
             error.put("message", e.getMessage());
             error.put("success", false);
             return error;
+        } else if (e instanceof IllegalArgumentException) {
+            BsResponse error = BsResponse.error();
+            error.put("message", e.getMessage());
+            error.put("success", false);
+            return error;
         }
         return BsResponse.error();
     }
