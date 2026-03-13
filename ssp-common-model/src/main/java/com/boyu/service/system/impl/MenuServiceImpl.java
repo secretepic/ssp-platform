@@ -4,20 +4,28 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.boyu.entity.system.MenuEntity;
+import com.boyu.entity.system.MenuRoleEntity;
 import com.boyu.mapper.system.MenuMapper;
+import com.boyu.mapper.system.MenuRoleMapper;
 import com.boyu.service.system.MenuService;
 import com.boyu.vo.system.MenuListVo;
 import com.boyu.vo.system.MenuTreeVo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> implements MenuService {
+    
+    private final MenuRoleMapper menuRoleMapper;
     @Override
     public MenuTreeVo tree() {
         List<MenuEntity> menuList = list(new QueryWrapper<MenuEntity>().orderByAsc("id"));
@@ -47,7 +55,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         if (menuList.isEmpty()) {
             return null;
         }
-        menuList.remove(0);
+        menuList.removeFirst();
         List<MenuEntity> contents = menuList.stream().filter(menuEntity -> menuEntity.getParentId().equals(1L)).toList();
         List<MenuListVo> menuListVos = contents.stream().map(menuEntity -> {
             MenuListVo menuListVo = new MenuListVo();
@@ -116,5 +124,17 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
             queue.addAll(childTreeVos);
         }
         return menuTreeVo;
+    }
+    
+    @Transactional
+    @Override
+    public boolean removeById(Serializable id) {
+        // 删除菜单与角色的关联
+        LambdaQueryWrapper<MenuRoleEntity> menuRoleWrapper = new LambdaQueryWrapper<>();
+        menuRoleWrapper.eq(MenuRoleEntity::getMenuId, id);
+        menuRoleMapper.delete(menuRoleWrapper);
+        
+        // 删除菜单本身
+        return super.removeById(id);
     }
 }

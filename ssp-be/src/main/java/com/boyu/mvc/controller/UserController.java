@@ -33,6 +33,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final com.boyu.service.system.UserRoleService userRoleService;
+
     private final JwtUtil jwtUtil;
 
     private final AuthenticationManager authenticationManager;
@@ -101,6 +103,24 @@ public class UserController {
         String code = lineCaptcha.getCode();
         response.setHeader("captcha-id", uuid);
         cacheManager.set(uuid, code, Duration.ofSeconds(60));
+    }
+
+    @GetMapping("/role/{userId}")
+    public BsResponse getUserRoles(@PathVariable Long userId) {
+        java.util.List<Long> roleIds = userRoleService.getRoleIdsByUserId(userId);
+        return BsResponse.ok(roleIds);
+    }
+
+    @PostMapping("/role/{userId}")
+    public BsResponse assignUserRoles(@PathVariable Long userId, @RequestBody java.util.List<Long> roleIds) {
+        boolean success = userRoleService.assignRolesToUser(userId, roleIds);
+        return success ? BsResponse.ok() : BsResponse.error("分配角色失败");
+    }
+
+    @DeleteMapping("/role/{userId}")
+    public BsResponse removeUserRoles(@PathVariable Long userId, @RequestBody java.util.List<Long> roleIds) {
+        boolean success = userRoleService.removeRolesFromUser(userId, roleIds);
+        return success ? BsResponse.ok() : BsResponse.error("移除角色失败");
     }
 
     private boolean verifyCaptcha(String captchaId, String captchaCode) {

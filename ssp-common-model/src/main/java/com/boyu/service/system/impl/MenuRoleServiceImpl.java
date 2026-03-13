@@ -8,6 +8,7 @@ import com.boyu.service.system.MenuRoleService;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MenuRoleServiceImpl extends ServiceImpl<MenuRoleMapper, MenuRoleEntity> implements MenuRoleService {
@@ -21,6 +22,7 @@ public class MenuRoleServiceImpl extends ServiceImpl<MenuRoleMapper, MenuRoleEnt
     }
     
     @Override
+    @Transactional
     public boolean assignMenusToRole(Long roleId, List<Long> menuIds) {
         // 先删除该角色的所有菜单关联
         LambdaQueryWrapper<MenuRoleEntity> wrapper = new LambdaQueryWrapper<>();

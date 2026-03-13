@@ -18,6 +18,7 @@ import java.util.List;
 public class RoleController extends BaseController {
 
     private final RoleService roleService;
+
     private final MenuRoleService menuRoleService;
 
     @GetMapping("/list")
@@ -34,7 +35,7 @@ public class RoleController extends BaseController {
         return roleService.save(roleEntity) ? BsResponse.ok() : BsResponse.error("添加失败");
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public BsResponse update(@Valid @RequestBody RoleVo roleVo) {
         RoleEntity roleEntity = new RoleEntity();
         BeanUtil.copyProperties(roleVo, roleEntity);
@@ -43,7 +44,7 @@ public class RoleController extends BaseController {
         return roleService.updateById(roleEntity) ? BsResponse.ok() : BsResponse.error("更新失败");
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public BsResponse delete(@PathVariable Long id) {
         return roleService.removeById(id) ? BsResponse.ok() : BsResponse.error("删除失败");
     }
